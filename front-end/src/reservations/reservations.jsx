@@ -1,19 +1,12 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { postReservation as post } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import initialFormState from "./initialFormState";
+import postReservation from "./postReservation";
 
 function NewReservation() {
   const history = useHistory();
 
-  const initialFormState = {
-    first_name: "",
-    last_name: "",
-    mobile_number: "",
-    reservation_date: "",
-    reservation_time: "",
-    people: 0,
-  };
   const [formData, setformData] = useState({ ...initialFormState });
   const handleChange = ({ target }) => {
     setformData({
@@ -23,20 +16,10 @@ function NewReservation() {
   };
   const [reservationsError, setReservationsError] = useState(null);
 
-  function postReservation() {
-    const abortController = new AbortController();
-    setReservationsError(null);
-    post({ data: formData }, abortController.signal);
-    return () => abortController.abort();
-  }
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(JSON.stringify({ data: formData }));
-    try {
-      postReservation();
-      history.push(`/dashboard?date=${formData.reservation_date}`);
-    } catch {}
+      postReservation(formData, setReservationsError, history);
+      // history.push(`/dashboard?date=${formData.reservation_date}`)
   };
 
   return (

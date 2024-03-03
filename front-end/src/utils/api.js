@@ -54,7 +54,7 @@ async function fetchJson(url, options, onCancel) {
 
 export async function postReservation(reservation, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
-  return await fetchJson(url, { headers, signal, method: "POST", body: JSON.stringify({ data: {reservation} }) }, [])
+  return await fetchJson(url, { headers, signal, method: "POST", body: JSON.stringify( reservation ) }, [])
 }
 
 /**
