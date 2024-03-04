@@ -3,7 +3,7 @@
  */
 const reservationsService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const validateDate = require("./validateDate");
+const validation = require("./validation");
 
 async function list(req, res) {
   const date = req.query.date;
@@ -12,13 +12,18 @@ async function list(req, res) {
 }
 
 async function create(req, res, next) {
-  const validationErrors = validateDate(
-    req.body.data.reservation_date
-  );
-  if (!validationErrors) {
+  let validationErrors = [];
+  const date = req.body.data.reservation_date;
+  const time = req.body.data.reservation_time;
+  const dateErrors = validation.validateDate(date);
+  const timeErrors = validation.validateTime(date, time);
+  if (dateErrors) validationErrors.push(dateErrors);
+  if (timeErrors) validationErrors.push(timeErrors);
+  if (!validationErrors.length) {
     const data = await reservationsService.create(req.body.data);
     res.status(201).json({ data });
   } else {
+    validationErrors = validationErrors.join("\n");
     next({ status: 400, message: validationErrors });
   }
 }
