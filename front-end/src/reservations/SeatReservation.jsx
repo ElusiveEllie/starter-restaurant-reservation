@@ -22,21 +22,25 @@ function SeatReservation() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
     setReservationSeat(formData, setSeatingError, history);
   };
 
-  useEffect(loadTables, []);
+  useEffect(() => {
+    loadTables();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function loadTables() {
     const abortController = new AbortController();
     listTables(abortController.signal).then(setTables);
-    listSingleReservation(reservation_id, abortController.signal).then(
-      setReservation
-    ).then(setformData({
-      ...formData,
-      ["reservation_id"]: reservation_id,
-    }));
+    listSingleReservation(reservation_id, abortController.signal)
+      .then(setReservation)
+      .then(
+        setformData({
+          ...formData,
+          reservation_id: reservation_id,
+        })
+      );
     return () => abortController.abort();
   }
 
@@ -54,7 +58,9 @@ function SeatReservation() {
               defaultValue=""
               required
             >
-              <option disabled value="">-- Select an Option --</option>
+              <option disabled value="">
+                -- Select an Option --
+              </option>
               {DisplaySeatingOptions(tables, reservation.people)}
             </select>
           </div>

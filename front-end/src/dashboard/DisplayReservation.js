@@ -1,4 +1,5 @@
-function DisplayReservation(reservations, history) {
+function DisplayReservation(props) {
+  const { reservations, history } = props
   const reservationsTable = reservations.map((reservation, index) => {
     return (
       <tr key={index}>

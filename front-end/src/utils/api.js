@@ -78,18 +78,27 @@ export async function postTable(table, signal) {
 export async function listSingleReservation(reservation_id, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
   const reservation = await fetchJson(url, { headers, signal }, []);
-  console.log(reservation);
   return reservation;
 }
 
 export async function putSeatingAssignment(params, signal) {
-  const {reservation_id, table_id} = params;
+  const { reservation_id, table_id } = params;
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   return await fetchJson(
     url,
-    { headers, signal, method: "PUT", body: JSON.stringify({ data: {reservation_id: reservation_id }}) },
+    {
+      headers,
+      signal,
+      method: "PUT",
+      body: JSON.stringify({ data: { reservation_id: reservation_id } }),
+    },
     []
   );
+}
+
+export async function deleteSeating(table_id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  return await fetchJson(url, { headers, signal, method: "DELETE" }, []);
 }
 
 /**

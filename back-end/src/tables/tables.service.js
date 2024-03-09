@@ -16,14 +16,17 @@ function update(updatedTable) {
 }
 
 function readAfterUpdate(table_id) {
-  return knex("tables as t")
-    .select("*")
-    .where({ table_id: table_id })
-    .first();
+  return knex("tables as t").select("*").where({ table_id: table_id }).first();
 }
 
 function create(table) {
   return knex("tables").insert([table]).returning("*");
+}
+
+function finishReservation(table_id) {
+  return knex("tables")
+    .where({ table_id })
+    .update({ reservation_id: null }, ["table_id", "reservation_id"]);
 }
 
 module.exports = {
@@ -32,4 +35,5 @@ module.exports = {
   read,
   update,
   readAfterUpdate,
+  finishReservation,
 };

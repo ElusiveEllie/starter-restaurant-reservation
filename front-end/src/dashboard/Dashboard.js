@@ -82,7 +82,9 @@ function Dashboard({ date }) {
             <th scope="col">Seat</th>
           </tr>
         </thead>
-        <tbody>{DisplayReservation(reservations, history)}</tbody>
+        <tbody>
+          <DisplayReservation reservations={reservations} history={history} />
+        </tbody>
       </table>
       <table className="table">
         <thead className="thead-dark">
@@ -90,9 +92,12 @@ function Dashboard({ date }) {
             <th scope="col">Table Name</th>
             <th scope="col">Table Capacity</th>
             <th scope="col">Occupied</th>
+            <th scope="col"></th>
           </tr>
         </thead>
-        <tbody>{DisplayTable(tables)}</tbody>
+        <tbody>
+          <DisplayTable loadDashboard={loadDashboard} tables={tables} />
+        </tbody>
       </table>
     </main>
   );
