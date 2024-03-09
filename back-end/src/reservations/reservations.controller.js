@@ -11,6 +11,20 @@ async function list(req, res) {
   res.json({ data });
 }
 
+async function reservationExists(req, res, next) {
+  const reservation = await reservationsService.read(req.params.reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({ status: 404, message: `Reservation cannot be found.` });
+}
+
+async function read(req, res, next) {
+  const reservation = res.locals.reservation;
+  res.json({ data: reservation });
+}
+
 async function create(req, res, next) {
   let validationErrors = [];
   const date = req.body.data.reservation_date;
@@ -31,4 +45,5 @@ async function create(req, res, next) {
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [asyncErrorBoundary(create)],
+  read: [asyncErrorBoundary(reservationExists), read],
 };

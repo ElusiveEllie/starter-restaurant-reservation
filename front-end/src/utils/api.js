@@ -54,7 +54,42 @@ async function fetchJson(url, options, onCancel) {
 
 export async function postReservation(reservation, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
-  return await fetchJson(url, { headers, signal, method: "POST", body: JSON.stringify( reservation ) }, [])
+  return await fetchJson(
+    url,
+    { headers, signal, method: "POST", body: JSON.stringify(reservation) },
+    []
+  );
+}
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(url, { headers, signal }, []);
+}
+
+export async function postTable(table, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(
+    url,
+    { headers, signal, method: "POST", body: JSON.stringify(table) },
+    []
+  );
+}
+
+export async function listSingleReservation(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  const reservation = await fetchJson(url, { headers, signal }, []);
+  console.log(reservation);
+  return reservation;
+}
+
+export async function putSeatingAssignment(params, signal) {
+  const {reservation_id, table_id} = params;
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  return await fetchJson(
+    url,
+    { headers, signal, method: "PUT", body: JSON.stringify({ data: {reservation_id: reservation_id }}) },
+    []
+  );
 }
 
 /**

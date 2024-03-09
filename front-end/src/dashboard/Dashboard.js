@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import DisplayReservation from "./DisplayReservation";
 import useQuery from "../utils/useQuery";
 import { today } from "../utils/date-time";
 import { useHistory } from "react-router-dom";
-
+import DisplayTable from "./DisplayTables";
 
 /**
  * Defines the dashboard page.
@@ -18,6 +18,7 @@ function Dashboard({ date }) {
   const dateParam = query.get("date");
   if (dateParam) date = dateParam;
   const [reservations, setReservations] = useState([]);
+  const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const history = useHistory();
 
@@ -29,6 +30,7 @@ function Dashboard({ date }) {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    listTables(abortController.signal).then(setTables);
     return () => abortController.abort();
   }
 
@@ -54,9 +56,18 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
-      <button onClick={() => changeDate("back")}>Previous</button>
-      <button onClick={() => changeDate("today")}>Today</button>
-      <button onClick={() => changeDate("forward")}>Next</button>
+      <button className="btn btn-secondary" onClick={() => changeDate("back")}>
+        Previous
+      </button>
+      <button className="btn btn-primary" onClick={() => changeDate("today")}>
+        Today
+      </button>
+      <button
+        className="btn btn-secondary"
+        onClick={() => changeDate("forward")}
+      >
+        Next
+      </button>
       <ErrorAlert error={reservationsError} />
       <table className="table">
         <thead className="thead-light">
@@ -68,9 +79,20 @@ function Dashboard({ date }) {
             <th scope="col"># Guests</th>
             <th scope="col">Contact Number</th>
             <th scope="col">Date</th>
+            <th scope="col">Seat</th>
           </tr>
         </thead>
-        <tbody>{DisplayReservation(reservations)}</tbody>
+        <tbody>{DisplayReservation(reservations, history)}</tbody>
+      </table>
+      <table className="table">
+        <thead className="thead-dark">
+          <tr>
+            <th scope="col">Table Name</th>
+            <th scope="col">Table Capacity</th>
+            <th scope="col">Occupied</th>
+          </tr>
+        </thead>
+        <tbody>{DisplayTable(tables)}</tbody>
       </table>
     </main>
   );

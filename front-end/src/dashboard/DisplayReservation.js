@@ -1,4 +1,4 @@
-function DisplayReservation(reservations) {
+function DisplayReservation(reservations, history) {
   const reservationsTable = reservations.map((reservation, index) => {
     return (
       <tr key={index}>
@@ -9,9 +9,19 @@ function DisplayReservation(reservations) {
         <td>{reservation.people}</td>
         <td>{reservation.mobile_number}</td>
         <td>{reservation.reservation_date}</td>
+        <td>
+          <button
+            className="btn btn-secondary"
+            onClick={() =>
+              history.push(`/reservations/${reservation.reservation_id}/seat`)
+            }
+          >
+            Seat
+          </button>
+        </td>
       </tr>
-    )
-  })
+    );
+  });
   return reservationsTable;
 }
 

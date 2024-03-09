@@ -18,8 +18,7 @@ function NewReservation() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-      postReservation(formData, setReservationsError, history);
-      // history.push(`/dashboard?date=${formData.reservation_date}`)
+    postReservation(formData, setReservationsError, history);
   };
 
   return (
@@ -79,6 +78,7 @@ function NewReservation() {
             type="number"
             id="people"
             name="people"
+            min="1"
             onChange={handleChange}
             value={formData.people}
             className="form-control"
