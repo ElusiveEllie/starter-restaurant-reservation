@@ -141,27 +141,29 @@ async function update(req, res, next) {
 }
 
 async function updateStatus(req, res, next) {
+  if (
+    res.locals.reservation.status === "seated" ||
+    res.locals.reservation.status === "finished"
+  ) {
+    return next({
+      status: 400,
+      message: `Invalid status: ${res.locals.reservation.status}`,
+    });
+  }
   const updatedReservation = {
     ...res.locals.reservation,
     ...req.body.data,
     reservation_id: res.locals.reservation.reservation_id,
   };
-    if (!VALID_STATUSES.includes(updatedReservation.status)) {
-      return next({
-        status: 400,
-        message: `Invalid status: ${updatedReservation.status}`,
-      });
-    }
+  if (!VALID_STATUSES.includes(updatedReservation.status)) {
+    return next({
+      status: 400,
+      message: `Invalid status: ${updatedReservation.status}`,
+    });
+  }
 
-    if (updatedReservation.status === "finished") {
-      return next({
-        status: 400,
-        message: `A finished reservation cannot be updated.`,
-      });
-    }
-
-    await reservationsService.update(updatedReservation);
-    next();
+  await reservationsService.update(updatedReservation);
+  next();
 }
 
 async function readUpdate(req, res, next) {
@@ -187,9 +189,8 @@ module.exports = {
     asyncErrorBoundary(readUpdate),
   ],
   updateStatus: [
-    hasOnlyValidProperties,
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(updateStatus),
     asyncErrorBoundary(readUpdate),
-  ]
+  ],
 };
