@@ -56,13 +56,14 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
-      <button className="btn btn-secondary" onClick={() => changeDate("back")}>
+      <button type="button" className="btn btn-secondary" onClick={() => changeDate("back")}>
         Previous
       </button>
-      <button className="btn btn-primary" onClick={() => changeDate("today")}>
+      <button type="button" className="btn btn-primary" onClick={() => changeDate("today")}>
         Today
       </button>
       <button
+        type="button" 
         className="btn btn-secondary"
         onClick={() => changeDate("forward")}
       >
@@ -86,7 +87,7 @@ function Dashboard({ date }) {
           </tr>
         </thead>
         <tbody>
-          <DisplayReservation reservations={reservations} history={history} loadDashboard={loadDashboard} />
+          <DisplayReservation reservations={reservations} history={history} />
         </tbody>
       </table>
       <table className="table">

@@ -16,7 +16,7 @@ async function cancelReservation(reservation_id) {
 }
 
 function DisplayReservation(props) {
-  const { reservations, history, loadDashboard } = props;
+  const { reservations, history } = props;
   const reservationsTable = reservations.map((reservation, index) => {
     if (
       reservation.status !== "finished" &&
@@ -38,6 +38,7 @@ function DisplayReservation(props) {
             <td>
               <a href={`/reservations/${reservation.reservation_id}/edit`}>
                 <button
+                  type="button"
                   className="btn btn-secondary"
                   onClick={() =>
                     history.push(
@@ -54,6 +55,7 @@ function DisplayReservation(props) {
             <td>
               <a href={`/reservations/${reservation.reservation_id}/seat`}>
                 <button
+                  type="button"
                   className="btn btn-secondary"
                   onClick={() =>
                     history.push(
@@ -69,11 +71,12 @@ function DisplayReservation(props) {
           {reservation.status === "booked" ? (
             <td>
               <button
+                type="button"
                 className="btn btn-danger"
                 data-reservation-id-cancel={reservation.reservation_id}
                 onClick={async () => {
                   await cancelReservation(reservation.reservation_id);
-                  await loadDashboard();
+                  history.goBack();
                 }}
               >
                 Cancel

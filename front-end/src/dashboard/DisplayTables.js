@@ -24,6 +24,7 @@ function DisplayTables(props) {
         <td>
           {table.reservation_id ? (
             <button
+              type="button" 
               onClick={async () => {
                 await finishTable(table.table_id, table.reservation_id);
                 await loadDashboard();
