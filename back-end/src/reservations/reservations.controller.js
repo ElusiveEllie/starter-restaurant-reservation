@@ -4,10 +4,59 @@
 const reservationsService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const validation = require("./validation");
+const hasProperties = require("../errors/hasProperties");
+const hasRequiredProperties = hasProperties(
+  "first_name",
+  "last_name",
+  "mobile_number",
+  "reservation_date",
+  "reservation_time",
+  "people"
+);
+
+const VALID_PROPERTIES = [
+  "first_name",
+  "last_name",
+  "mobile_number",
+  "reservation_date",
+  "reservation_time",
+  "people",
+  "status"
+];
+
+const VALID_STATUSES = [
+  "booked",
+  "seated",
+  "finished"
+]
+
+function hasOnlyValidProperties(req, res, next) {
+  const { data = {} } = req.body;
+
+  const invalidFields = Object.keys(data).filter(
+    (field) => !VALID_PROPERTIES.includes(field)
+  );
+
+  if (invalidFields.length) {
+    return next({
+      status: 400,
+      message: `Invalid field(s): ${invalidFields.join(", ")}`,
+    });
+  }
+
+  if (data.status === "seated" || data.status === "finished") {
+    return next({
+      status: 400,
+      message: `Invalid status: ${data.status}`,
+    });
+  }
+  next();
+}
 
 async function list(req, res) {
   const date = req.query.date;
-  const data = await reservationsService.list(date);
+  let data = await reservationsService.list(date);
+  data = data.filter((reservation) => reservation.status !== "finished");
   res.json({ data });
 }
 
@@ -17,7 +66,10 @@ async function reservationExists(req, res, next) {
     res.locals.reservation = reservation;
     return next();
   }
-  next({ status: 404, message: `Reservation cannot be found.` });
+  next({
+    status: 404,
+    message: `Reservation ${req.params.reservation_id} cannot be found.`,
+  });
 }
 
 async function read(req, res, next) {
@@ -34,7 +86,8 @@ async function create(req, res, next) {
   if (dateErrors) validationErrors.push(dateErrors);
   if (timeErrors) validationErrors.push(timeErrors);
   if (!validationErrors.length) {
-    const data = await reservationsService.create(req.body.data);
+    let data = await reservationsService.create(req.body.data);
+    data = data[0];
     res.status(201).json({ data });
   } else {
     validationErrors = validationErrors.join("\n");
@@ -42,8 +95,45 @@ async function create(req, res, next) {
   }
 }
 
+async function update(req, res, next) {
+  const updatedReservation = {
+    ...res.locals.reservation,
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+
+  if (!VALID_STATUSES.includes(req.body.data.status)) {
+    return next({
+      status: 400,
+      message: `Invalid status: ${req.body.data.status}`,
+    });
+  }
+
+  if (res.locals.reservation.status === "finished") {
+    return next({
+      status: 400,
+      message: `A finished reservation cannot be updated.`,
+    });
+  }
+
+  await reservationsService.update(updatedReservation);
+  next();
+}
+
+async function readUpdate(req, res, next) {
+  let data = await reservationsService.readAfterUpdate(
+    res.locals.reservation.reservation_id
+  );
+  res.json({ data });
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create: [asyncErrorBoundary(create)],
+  create: [hasOnlyValidProperties, hasRequiredProperties, asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), read],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(update),
+    asyncErrorBoundary(readUpdate),
+  ],
 };

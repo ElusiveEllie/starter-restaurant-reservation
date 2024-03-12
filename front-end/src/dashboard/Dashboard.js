@@ -79,7 +79,8 @@ function Dashboard({ date }) {
             <th scope="col"># Guests</th>
             <th scope="col">Contact Number</th>
             <th scope="col">Date</th>
-            <th scope="col">Seat</th>
+            <th scope="col">Status</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>

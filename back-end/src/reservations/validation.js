@@ -15,7 +15,7 @@ function validateDate(date) {
   const day = date.getUTCDay();
   const errors = [];
   if (inPast) errors.push("Date must be for today or a future date.");
-  if (day === 2) errors.push("Date must not be a Tuesday.");
+  if (day === 2) errors.push("Periodic Tables is closed on Tuesdays.");
   return errors.join("\n");
 }
 
@@ -32,8 +32,8 @@ function validateTime(date, time) {
   }
   const errors = [];
   if (inPast) errors.push("Time must be in the future.");
-  if (hours < 9 || (hours === 9 && minutes < 30)) errors.push("Reservations can only be made after 9:30 AM.");
-  if (hours > 22 || (hours === 22 && minutes > 30)) errors.push("Reservations can only be made up to 10:30 PM.");
+  if (hours < 10 || (hours === 10 && minutes < 30)) errors.push("Reservations can only be made after 10:30 AM.");
+  if (hours > 21 || (hours === 21 && minutes > 30)) errors.push("Reservations can only be made up to 9:30 PM.");
   return errors.join("\n");
 }
 

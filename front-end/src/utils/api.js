@@ -54,6 +54,7 @@ async function fetchJson(url, options, onCancel) {
 
 export async function postReservation(reservation, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
+  reservation.data.people = Number(reservation.data.people);
   return await fetchJson(
     url,
     { headers, signal, method: "POST", body: JSON.stringify(reservation) },
@@ -68,6 +69,7 @@ export async function listTables(signal) {
 
 export async function postTable(table, signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
+  table.data.capacity = Number(table.data.capacity);
   return await fetchJson(
     url,
     { headers, signal, method: "POST", body: JSON.stringify(table) },
@@ -84,6 +86,7 @@ export async function listSingleReservation(reservation_id, signal) {
 export async function putSeatingAssignment(params, signal) {
   const { reservation_id, table_id } = params;
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  // await putSeatingStatus(params, signal);
   return await fetchJson(
     url,
     {
@@ -96,7 +99,20 @@ export async function putSeatingAssignment(params, signal) {
   );
 }
 
-export async function deleteSeating(table_id, signal) {
+export async function putSeatingStatus(params, signal) {
+  const { reservation_id, status } = params;
+  console.log(params);
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+  return await fetchJson(url, {
+    headers,
+    signal,
+    method: "PUT",
+    body: JSON.stringify({ data: { status: status } }),
+  });
+}
+
+export async function deleteSeating(params, signal) {
+  const { table_id } = params;
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   return await fetchJson(url, { headers, signal, method: "DELETE" }, []);
 }

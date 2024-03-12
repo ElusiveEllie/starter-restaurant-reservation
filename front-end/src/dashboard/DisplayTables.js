@@ -1,13 +1,13 @@
 import { deleteSeating } from "../utils/api";
 
-async function finishTable(table_id) {
+async function finishTable(table_id, reservation_id) {
   if (
     window.confirm(
-      `Is this table (Table ${table_id}) ready to seat new guests? This cannot be undone.`
+      `Is this table ready to seat new guests? This cannot be undone.`
     )
   ) {
     const abortController = new AbortController();
-    await deleteSeating(table_id, abortController.signal);
+    await deleteSeating({table_id, reservation_id, status: "finished"}, abortController.signal);
   }
 }
 
@@ -25,7 +25,7 @@ function DisplayTables(props) {
           {table.reservation_id ? (
             <button
               onClick={async () => {
-                await finishTable(table.table_id);
+                await finishTable(table.table_id, table.reservation_id);
                 await loadDashboard();
               }}
               className="btn btn-secondary"
