@@ -40,24 +40,28 @@ function SearchReservation() {
         </button>
       </div>
       <div className="row">
-      <table className="table">
-        <thead className="thead-light">
-          <tr>
-            <th scope="col">Time</th>
-            <th scope="col">ID</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">First Name</th>
-            <th scope="col"># Guests</th>
-            <th scope="col">Contact Number</th>
-            <th scope="col">Date</th>
-            <th scope="col">Status</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <DisplayReservation reservations={reservations ? reservations : []} history={history} />
-        </tbody>
-      </table>
+        <table className="table">
+          <thead className="thead-light">
+            <tr>
+              <th scope="col">Time</th>
+              <th scope="col">ID</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">First Name</th>
+              <th scope="col"># Guests</th>
+              <th scope="col">Contact Number</th>
+              <th scope="col">Date</th>
+              <th scope="col">Status</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <DisplayReservation
+              reservations={reservations ? reservations : []}
+              history={history}
+            />
+          </tbody>
+        </table>
+        {(Array.isArray(reservations) && reservations.length === 0) ? <div className="alert alert-danger m-2">No reservations found.</div> : null}
         <ErrorAlert error={reservationsError} />
       </div>
     </form>

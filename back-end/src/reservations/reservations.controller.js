@@ -55,12 +55,6 @@ async function list(req, res, next) {
   if (mobile_number) {
     let data = await reservationsService.listByNumber(mobile_number);
     data = data.filter((reservation) => reservation.status !== "finished");
-    if (data.length === 0) {
-      return next({
-        status: 404,
-        message: "No reservations found."
-      })
-    }
     res.json({ data });
   } else {
     let data = await reservationsService.list(date);
