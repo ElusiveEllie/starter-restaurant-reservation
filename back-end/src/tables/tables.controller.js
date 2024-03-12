@@ -8,7 +8,8 @@ const hasRequiredProperties = hasProperties(
 
 const VALID_PROPERTIES = [
   "table_name",
-  "capacity"
+  "capacity",
+  "reservation_id"
 ];
 
 function hasOnlyValidProperties(req, res, next) {

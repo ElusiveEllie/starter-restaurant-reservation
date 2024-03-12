@@ -31,7 +31,6 @@ function hasProperties(...properties) {
           }
         } else if (property === "people" || property === "capacity") {
           if (typeof(value) !== "number") {
-            console.log(value, typeof(value));
             const error = new Error(`The number of ${property} must be a number.`);
             error.status = 400;
             throw error;

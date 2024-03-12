@@ -16,6 +16,7 @@ function DisplayReservation(props) {
           </td>
           {reservation.status === "booked" ? (
             <td>
+              <a href={`/reservations/${reservation.reservation_id}/seat`}>
               <button
                 className="btn btn-secondary"
                 onClick={() =>
@@ -26,6 +27,7 @@ function DisplayReservation(props) {
               >
                 Seat
               </button>
+              </a>
             </td>
           ) : null}
         </tr>
