@@ -117,6 +117,24 @@ export async function deleteSeating(params, signal) {
   return await fetchJson(url, { headers, signal, method: "DELETE" }, []);
 }
 
+export async function searchForReservation(params, signal) {
+  const { mobile_number } = params;
+  const url = new URL(
+    `${API_BASE_URL}/reservations?mobile_number=${mobile_number}`
+  );
+  return await fetchJson(
+    url,
+    {
+      headers,
+      signal,
+      method: "GET",
+    },
+    []
+  )
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
+
 /**
  * Retrieves all existing reservation.
  * @returns {Promise<[reservation]>}

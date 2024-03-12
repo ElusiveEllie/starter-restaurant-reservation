@@ -21,14 +21,10 @@ const VALID_PROPERTIES = [
   "reservation_date",
   "reservation_time",
   "people",
-  "status"
+  "status",
 ];
 
-const VALID_STATUSES = [
-  "booked",
-  "seated",
-  "finished"
-]
+const VALID_STATUSES = ["booked", "seated", "finished"];
 
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
@@ -53,11 +49,24 @@ function hasOnlyValidProperties(req, res, next) {
   next();
 }
 
-async function list(req, res) {
+async function list(req, res, next) {
   const date = req.query.date;
-  let data = await reservationsService.list(date);
-  data = data.filter((reservation) => reservation.status !== "finished");
-  res.json({ data });
+  const mobile_number = req.query.mobile_number;
+  if (mobile_number) {
+    let data = await reservationsService.listByNumber(mobile_number);
+    data = data.filter((reservation) => reservation.status !== "finished");
+    if (data.length === 0) {
+      return next({
+        status: 404,
+        message: "No reservations found."
+      })
+    }
+    res.json({ data });
+  } else {
+    let data = await reservationsService.list(date);
+    data = data.filter((reservation) => reservation.status !== "finished");
+    res.json({ data });
+  }
 }
 
 async function reservationExists(req, res, next) {
@@ -129,7 +138,11 @@ async function readUpdate(req, res, next) {
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create: [hasOnlyValidProperties, hasRequiredProperties, asyncErrorBoundary(create)],
+  create: [
+    hasOnlyValidProperties,
+    hasRequiredProperties,
+    asyncErrorBoundary(create),
+  ],
   read: [asyncErrorBoundary(reservationExists), read],
   update: [
     asyncErrorBoundary(reservationExists),
