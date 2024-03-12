@@ -146,7 +146,6 @@ async function updateStatus(req, res, next) {
     ...req.body.data,
     reservation_id: res.locals.reservation.reservation_id,
   };
-  console.log(updatedReservation);
     if (!VALID_STATUSES.includes(updatedReservation.status)) {
       return next({
         status: 400,
@@ -154,17 +153,14 @@ async function updateStatus(req, res, next) {
       });
     }
 
-    console.log("Passed validation of statuses");
     if (updatedReservation.status === "finished") {
       return next({
         status: 400,
         message: `A finished reservation cannot be updated.`,
       });
     }
-    console.log("Passed validation that status isn't finished");
 
     await reservationsService.update(updatedReservation);
-    console.log("Awaited Update");
     next();
 }
 

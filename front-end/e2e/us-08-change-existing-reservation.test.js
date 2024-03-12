@@ -135,7 +135,7 @@ describe("US-08 - Change an existing reservation - E2E", () => {
 
   describe("/reservations/:reservation_id/edit page", () => {
     beforeEach(async () => {
-      await page.goto(`${baseURL}/dashboard`, {
+      await page.goto(`${baseURL}/dashboard?date=2035-01-04`, {
         waitUntil: "networkidle0",
       });
       await page.goto(

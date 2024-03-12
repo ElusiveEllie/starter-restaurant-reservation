@@ -1,6 +1,6 @@
 import { putSeatingStatus } from "../utils/api";
 
-async function cancelReservation(reservation_id) {
+async function cancelReservation(reservation_id, history) {
   if (
     window.confirm(
       `Do you want to cancel this reservation? This cannot be undone.`
@@ -11,6 +11,7 @@ async function cancelReservation(reservation_id) {
       { reservation_id, status: "cancelled" },
       abortController.signal
     );
+    history.go(0);
     return () => abortController.abort();
   }
 }
@@ -75,8 +76,7 @@ function DisplayReservation(props) {
                 className="btn btn-danger"
                 data-reservation-id-cancel={reservation.reservation_id}
                 onClick={async () => {
-                  await cancelReservation(reservation.reservation_id);
-                  history.goBack();
+                  await cancelReservation(reservation.reservation_id, history);
                 }}
               >
                 Cancel
