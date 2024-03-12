@@ -81,10 +81,12 @@ function Dashboard({ date }) {
             <th scope="col">Date</th>
             <th scope="col">Status</th>
             <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          <DisplayReservation reservations={reservations} history={history} />
+          <DisplayReservation reservations={reservations} history={history} loadDashboard={loadDashboard} />
         </tbody>
       </table>
       <table className="table">

@@ -22,9 +22,12 @@ const VALID_PROPERTIES = [
   "reservation_time",
   "people",
   "status",
+  "reservation_id",
+  "created_at",
+  "updated_at",
 ];
 
-const VALID_STATUSES = ["booked", "seated", "finished"];
+const VALID_STATUSES = ["booked", "seated", "finished", "cancelled"];
 
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
@@ -104,23 +107,65 @@ async function update(req, res, next) {
     ...req.body.data,
     reservation_id: res.locals.reservation.reservation_id,
   };
-
-  if (!VALID_STATUSES.includes(req.body.data.status)) {
-    return next({
-      status: 400,
-      message: `Invalid status: ${req.body.data.status}`,
-    });
+  let validationErrors = [];
+  if (updatedReservation.status !== "cancelled") {
+    const date = updatedReservation.reservation_date;
+    const time = updatedReservation.reservation_time;
+    const dateErrors = validation.validateDate(date);
+    const timeErrors = validation.validateTime(date, time);
+    if (dateErrors) validationErrors.push(dateErrors);
+    if (timeErrors) validationErrors.push(timeErrors);
   }
 
-  if (res.locals.reservation.status === "finished") {
-    return next({
-      status: 400,
-      message: `A finished reservation cannot be updated.`,
-    });
-  }
+  if (!validationErrors.length) {
+    if (!VALID_STATUSES.includes(req.body.data.status)) {
+      return next({
+        status: 400,
+        message: `Invalid status: ${req.body.data.status}`,
+      });
+    }
 
-  await reservationsService.update(updatedReservation);
-  next();
+    if (res.locals.reservation.status === "finished") {
+      return next({
+        status: 400,
+        message: `A finished reservation cannot be updated.`,
+      });
+    }
+
+    await reservationsService.update(updatedReservation);
+    next();
+  } else {
+    validationErrors = validationErrors.join("\n");
+    next({ status: 400, message: validationErrors });
+  }
+}
+
+async function updateStatus(req, res, next) {
+  const updatedReservation = {
+    ...res.locals.reservation,
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+  console.log(updatedReservation);
+    if (!VALID_STATUSES.includes(updatedReservation.status)) {
+      return next({
+        status: 400,
+        message: `Invalid status: ${updatedReservation.status}`,
+      });
+    }
+
+    console.log("Passed validation of statuses");
+    if (updatedReservation.status === "finished") {
+      return next({
+        status: 400,
+        message: `A finished reservation cannot be updated.`,
+      });
+    }
+    console.log("Passed validation that status isn't finished");
+
+    await reservationsService.update(updatedReservation);
+    console.log("Awaited Update");
+    next();
 }
 
 async function readUpdate(req, res, next) {
@@ -139,8 +184,16 @@ module.exports = {
   ],
   read: [asyncErrorBoundary(reservationExists), read],
   update: [
+    hasRequiredProperties,
+    hasOnlyValidProperties,
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(update),
     asyncErrorBoundary(readUpdate),
   ],
+  updateStatus: [
+    hasOnlyValidProperties,
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(updateStatus),
+    asyncErrorBoundary(readUpdate),
+  ]
 };

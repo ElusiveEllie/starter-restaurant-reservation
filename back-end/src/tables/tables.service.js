@@ -17,15 +17,6 @@ function readReservation(reservation_id) {
 
 function update(updatedTable) {
   return knex.transaction(async function (trx) {
-    // const reservation = await knex("reservations")
-    // .select("*")
-    // .where({ reservation_id: updatedTable.reservation_id })
-    // .first();
-
-    // console.log(reservation);
-
-    // console.log(reservation.status === "seated");
-
     return knex("reservations")
       .select("*")
       .where({ reservation_id: updatedTable.reservation_id })
