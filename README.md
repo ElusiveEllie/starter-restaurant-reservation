@@ -8,49 +8,49 @@ The application allows restaurant staff to manage reservations and table assignm
 
 1. The main page is the Dashboard, with the top section for displaying reservations in a data table, while the bottom section shows restaurant table status and capacity. Buttons below the current date allow the user to move back and forth in the calendar, and return to the current day at any time.
 <kbd>
-<img width="1080" alt="Dashboard for reservation system" src="https://i.imgur.com/Pr1zsiB.png">
+<img width="1080" alt="Dashboard for reservation system" src="https://i.imgur.com/CgtUBjx.png">
 </kbd>
 
 <hr>
 
 2. Clicking the button to edit a reservation brings up a form with fields for the necessary information for the reservation. It auto-populates with the information from the database when it loads.
 <kbd>
-<img width="1080" alt="Form for reservation editing" src="https://i.imgur.com/srvvY5P.png">
+<img width="1080" alt="Form for reservation editing" src="https://i.imgur.com/3VNos0v.png">
 </kbd>
 
 <hr>
 
 3. Clicking the button to seat a reservation brings up a page with a drop-down to assign a table to the reservation. The drop-down populates with every available table and greys out any tables that do not have enough capacity for the reservation.
 <kbd>
-<img width="1080" alt="Form for table seating" src="https://i.imgur.com/Jk9x0Vz.png">
+<img width="1080" alt="Form for table seating" src="https://i.imgur.com/TJVX6Y6.png">
 </kbd>
 
 <hr>
 
 4. The Search page allows you to enter in a mobile number, partial or complete, and find all reservations that match. The same form factor as the Dashboard is shown.
 <kbd>
-<img width="1080" alt="Search page" src="https://i.imgur.com/oKyjG1D.png">
+<img width="1080" alt="Search page" src="https://i.imgur.com/XLe4P1E.png">
 </kbd>
 
 <hr>
 
 5. The New Reservation page utilizes the same form factor as the Edit Reservation page, allowing you to input a new reservation. For the sake of demonstration, Periodic Tables is closed on Tuesdays and does not allow reservations before 10:30 AM or after 9:30 PM, and the form does not allow reservations to be made outside of these constraints.
 <kbd>
-<img width="1080" alt="New Reservation page" src="https://i.imgur.com/2LzDRz1.png">
+<img width="1080" alt="New Reservation page" src="https://i.imgur.com/Kj8eMZY.png">
 </kbd>
 
 <hr>
 
 6. The New Table page allows the user to add another table to the list of tables that reservations can be assigned to.
 <kbd>
-<img width="1080" alt="New Table page" src="https://i.imgur.com/cSkvlWM.png">
+<img width="1080" alt="New Table page" src="https://i.imgur.com/HxpISTv.png">
 </kbd>
 
 <hr>
 
 7. The website is responsive and will look good on any size device used.
 <kbd>
-<img width="412" alt="New Reservation page on mobile" src="https://i.imgur.com/YWCHmBu.png">
+<img width="412" alt="New Reservation page on mobile" src="https://i.imgur.com/2OICAqf.png">
 </kbd>
 
 ## Back-end
