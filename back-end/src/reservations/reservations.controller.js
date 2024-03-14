@@ -49,14 +49,6 @@ function hasOnlyValidProperties(req, res, next) {
     });
   }
 
-  // Return 400 with invalid mobile_number message if mobile_number doesn't match proper format
-  if (!/^([\d\d\d-\d\d\d-\d\d\d\d]{12,12})$/.test(data.mobile_number)) {
-    return next({
-      status: 400,
-      message: `mobile_number field must be in format of XXX-XXX-XXXX. Received ${data.mobile_number}.`,
-    });
-  }
-
   // Return 400 with invalid status message if status is "seated" or "finished"
   if (data.status === "seated" || data.status === "finished") {
     return next({
@@ -120,13 +112,16 @@ async function create(req, res, next) {
   let validationErrors = [];
   const date = req.body.data.reservation_date;
   const time = req.body.data.reservation_time;
+  const mobile_number = req.body.data.mobile_number;
 
-  // Validate date and time
+  // Validate date, time, and mobile number form factor
   const dateErrors = validation.validateDate(date);
   const timeErrors = validation.validateTime(date, time);
+  const mobileNumberErrors = validation.validateMobileNumber(mobile_number);
 
   if (dateErrors) validationErrors.push(dateErrors);
   if (timeErrors) validationErrors.push(timeErrors);
+  if (mobileNumberErrors) validationErrors.push(mobileNumberErrors);
 
   if (!validationErrors.length) {
     let data = await reservationsService.create(req.body.data);
@@ -153,13 +148,16 @@ async function update(req, res, next) {
   let validationErrors = [];
 
   if (updatedReservation.status !== "cancelled") {
-    // Validate date and time if reservation is not cancelled
+    // Validate date, time, and mobile number form factor if reservation is not cancelled
     const date = updatedReservation.reservation_date;
     const time = updatedReservation.reservation_time;
+    const mobile_number = updatedReservation.mobile_number;
     const dateErrors = validation.validateDate(date);
     const timeErrors = validation.validateTime(date, time);
+    const mobileNumberErrors = validation.validateMobileNumber(mobile_number);
     if (dateErrors) validationErrors.push(dateErrors);
     if (timeErrors) validationErrors.push(timeErrors);
+    if (mobileNumberErrors) validationErrors.push(mobileNumberErrors);
   }
 
   if (!validationErrors.length) {

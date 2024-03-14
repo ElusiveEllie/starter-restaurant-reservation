@@ -56,7 +56,26 @@ function validateTime(date, time) {
   return errors.join("\n");
 }
 
+/**
+ * Validates the provided mobile number's form factor.
+ * @param {string} mobile_number - The mobile_number associated with the reservation.
+ * @returns {string} - A string containing any validation errors, separated by newline characters.
+ */
+
+function validateMobileNumber(mobile_number) {
+  // Return 400 with invalid mobile_number message if mobile_number doesn't match proper format
+  if (/^([\d\d\d\d\d\d\d\d\d\d]{10,10})$/.test(mobile_number)) {
+    mobile_number = mobile_number.substring(0, 3) + "-" + mobile_number.substring(3, 6) + "-" + mobile_number.substring(6);
+  }
+  const errors = [];
+  if (!/^([\d\d\d-\d\d\d-\d\d\d\d]{12,12})$/.test(mobile_number)) {
+    errors.push(`mobile_number field must be in format of XXX-XXX-XXXX. Received ${mobile_number}.`);
+  }
+  return errors.join("\n");
+}
+
 module.exports = {
   validateDate,
   validateTime,
+  validateMobileNumber
 };
