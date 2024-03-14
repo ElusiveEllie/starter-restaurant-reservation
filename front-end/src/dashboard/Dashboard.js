@@ -17,11 +17,15 @@ function Dashboard({ date }) {
   const query = useQuery();
   const dateParam = query.get("date");
   if (dateParam) date = dateParam;
+
+  // State for form data and error handling
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+
   const history = useHistory();
 
+  // Effect to load dashboard on date changes
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
@@ -56,14 +60,22 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
-      <button type="button" className="btn btn-secondary" onClick={() => changeDate("back")}>
+      <button
+        type="button"
+        className="btn btn-secondary"
+        onClick={() => changeDate("back")}
+      >
         Previous
       </button>
-      <button type="button" className="btn btn-primary" onClick={() => changeDate("today")}>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={() => changeDate("today")}
+      >
         Today
       </button>
       <button
-        type="button" 
+        type="button"
         className="btn btn-secondary"
         onClick={() => changeDate("forward")}
       >

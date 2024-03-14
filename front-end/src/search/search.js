@@ -4,17 +4,26 @@ import searchForReservation from "./searchForReservation";
 import { useHistory } from "react-router-dom";
 import DisplayReservation from "../dashboard/DisplayReservation";
 
+/**
+ * Displays a form for searching reservations by customer's phone number.
+ * @returns {JSX.Element} - The JSX element representing the reservation search form.
+ */
+
 function SearchReservation() {
   const history = useHistory();
+
+  // State for form data, search results, and error handling
   const [formData, setformData] = useState({ mobile_number: "" });
+  const [reservations, setReservations] = useState(null);
+  const [reservationsError, setReservationsError] = useState(null);
+
+  // Function to handle form submission
   const handleChange = ({ target }) => {
     setformData({
       ...formData,
       [target.name]: target.value,
     });
   };
-  const [reservations, setReservations] = useState(null);
-  const [reservationsError, setReservationsError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -63,7 +72,9 @@ function SearchReservation() {
             />
           </tbody>
         </table>
-        {(Array.isArray(reservations) && reservations.length === 0) ? <div className="alert alert-danger m-2">No reservations found.</div> : null}
+        {Array.isArray(reservations) && reservations.length === 0 ? (
+          <div className="alert alert-danger m-2">No reservations found.</div>
+        ) : null}
         <ErrorAlert error={reservationsError} />
       </div>
     </form>

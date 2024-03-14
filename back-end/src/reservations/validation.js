@@ -8,6 +8,12 @@ function today() {
   return asDateString(new Date());
 }
 
+/**
+ * Validates the provided date.
+ * @param {string} date - The date to be validated (in string format).
+ * @returns {string} - A string containing any validation errors, separated by newline characters.
+ */
+
 function validateDate(date) {
   date = new Date(date);
   currentDate = new Date(today());
@@ -19,6 +25,13 @@ function validateDate(date) {
   return errors.join("\n");
 }
 
+/**
+ * Validates the provided time based on the given date.
+ * @param {string} date - The date associated with the time (in string format).
+ * @param {string} time - The time to be validated (in string format).
+ * @returns {string} - A string containing any validation errors, separated by newline characters.
+ */
+
 function validateTime(date, time) {
   date = new Date(date);
   currentDate = new Date(today());
@@ -28,16 +41,22 @@ function validateTime(date, time) {
   const minutes = Number(time.slice(3));
   let inPast = 0;
   if (currentDate - date === 0) {
-    inPast = (now.getUTCHours() - hours > 0) || (now.getUTCHours() - hours === 0 && now.getMinutes() - minutes > 0) ? 1 : 0;
+    inPast =
+      now.getUTCHours() - hours > 0 ||
+      (now.getUTCHours() - hours === 0 && now.getMinutes() - minutes > 0)
+        ? 1
+        : 0;
   }
   const errors = [];
   if (inPast) errors.push("Time must be in the future.");
-  if (hours < 10 || (hours === 10 && minutes < 30)) errors.push("Reservations can only be made after 10:30 AM.");
-  if (hours > 21 || (hours === 21 && minutes > 30)) errors.push("Reservations can only be made up to 9:30 PM.");
+  if (hours < 10 || (hours === 10 && minutes < 30))
+    errors.push("Reservations can only be made after 10:30 AM.");
+  if (hours > 21 || (hours === 21 && minutes > 30))
+    errors.push("Reservations can only be made up to 9:30 PM.");
   return errors.join("\n");
 }
 
 module.exports = {
   validateDate,
   validateTime,
-}
+};

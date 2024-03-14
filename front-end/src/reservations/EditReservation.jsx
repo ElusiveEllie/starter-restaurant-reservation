@@ -5,19 +5,28 @@ import initialFormState from "./initialFormState";
 import putReservation from "./putReservation";
 import { listSingleReservation } from "../utils/api";
 
+/**
+ * Displays a form for editing a reservation.
+ * @returns {JSX.Element} - The JSX element representing the reservation editing form.
+ */
+
 function EditReservation() {
   const { reservation_id } = useParams();
   const history = useHistory();
 
+  // State for form data and error handling
   const [formData, setformData] = useState({ ...initialFormState });
+  const [reservationsError, setReservationsError] = useState(null);
+
+  // Function to handle form input changes
   const handleChange = ({ target }) => {
     setformData({
       ...formData,
       [target.name]: target.value,
     });
   };
-  const [reservationsError, setReservationsError] = useState(null);
 
+  // Effect to load reservation data on page load
   useEffect(loadReservation, [reservation_id]);
 
   function loadReservation() {

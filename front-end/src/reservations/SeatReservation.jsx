@@ -5,26 +5,36 @@ import setReservationSeat from "./SetReservationSeat";
 import { listSingleReservation, listTables } from "../utils/api";
 import DisplaySeatingOptions from "./DisplaySeatingOptions";
 
+/**
+ * Displays a form for seating a reservation at a table.
+ * @returns {JSX.Element} - The JSX element representing the reservation seating form.
+ */
+
 function SeatReservation() {
   const history = useHistory();
   const { reservation_id } = useParams();
 
+  // State for form data, tables, reservation, and error handling
   const [formData, setformData] = useState({});
   const [tables, setTables] = useState([]);
   const [reservation, setReservation] = useState([]);
+  const [seatingError, setSeatingError] = useState(null);
+
+  // Function to handle form input changes
   const handleChange = ({ target }) => {
     setformData({
       ...formData,
       [target.name]: target.value,
     });
   };
-  const [seatingError, setSeatingError] = useState(null);
 
+  // Function to handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
     setReservationSeat(formData, setSeatingError, history);
   };
 
+  // Effect to load tables and reservation data on page load
   useEffect(() => {
     loadTables();
     // eslint-disable-next-line react-hooks/exhaustive-deps

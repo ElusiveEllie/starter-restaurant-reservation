@@ -30,18 +30,22 @@ function hasProperties(...properties) {
             throw error;
           }
         } else if (property === "people" || property === "capacity") {
-          if (typeof(value) !== "number") {
-            const error = new Error(`The number of ${property} must be a number.`);
+          if (typeof value !== "number") {
+            const error = new Error(
+              `The number of ${property} must be a number.`
+            );
             error.status = 400;
             throw error;
           }
         } else if (property === "table_name") {
           if (value.length <= 1) {
-            const error = new Error(`The ${property}' must be at least 2 characters long.`);
+            const error = new Error(
+              `The ${property}' must be at least 2 characters long.`
+            );
             error.status = 400;
             throw error;
           }
-        } 
+        }
       });
       next();
     } catch (error) {

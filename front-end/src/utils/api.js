@@ -52,6 +52,13 @@ async function fetchJson(url, options, onCancel) {
   }
 }
 
+/**
+ * Creates a new reservation.
+ * @param {Object} reservation - The reservation data to be created.
+ * @param {AbortSignal} signal - An optional AbortSignal to abort the request.
+ * @returns {Promise} - A promise indicating the completion of the operation.
+ */
+
 export async function postReservation(reservation, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
   reservation.data.people = Number(reservation.data.people);
@@ -62,8 +69,17 @@ export async function postReservation(reservation, signal) {
   );
 }
 
+/**
+ * Updates an existing reservation.
+ * @param {Object} reservation - The reservation data to be updated.
+ * @param {AbortSignal} signal - An optional AbortSignal to abort the request.
+ * @returns {Promise} - A promise indicating the completion of the operation.
+ */
+
 export async function putReservation(reservation, signal) {
-  const url = new URL(`${API_BASE_URL}/reservations/${reservation.data.reservation_id}`);
+  const url = new URL(
+    `${API_BASE_URL}/reservations/${reservation.data.reservation_id}`
+  );
   reservation.data.people = Number(reservation.data.people);
   return await fetchJson(
     url,
@@ -72,10 +88,23 @@ export async function putReservation(reservation, signal) {
   );
 }
 
+/**
+ * Retrieves a list of tables.
+ * @param {AbortSignal} signal - An optional AbortSignal to abort the request.
+ * @returns {Promise<Array<Object>>} - A promise resolving to an array of tables.
+ */
+
 export async function listTables(signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
   return await fetchJson(url, { headers, signal }, []);
 }
+
+/**
+ * Creates a new table.
+ * @param {Object} table - The table data to be created.
+ * @param {AbortSignal} signal - An optional AbortSignal to abort the request.
+ * @returns {Promise<void>} - A promise indicating the completion of the operation.
+ */
 
 export async function postTable(table, signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
@@ -87,12 +116,28 @@ export async function postTable(table, signal) {
   );
 }
 
+/**
+ * Retrieves a single reservation by its ID.
+ * @param {string} reservation_id - The ID of the reservation to retrieve.
+ * @param {AbortSignal} signal - An optional AbortSignal to abort the request.
+ * @returns {Promise<Object>} - A promise resolving to the retrieved reservation.
+ */
+
 export async function listSingleReservation(reservation_id, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+/**
+ * Updates the seating assignment of a table.
+ * @param {Object} params - The parameters for updating seating assignment.
+ * @param {string} params.reservation_id - The ID of the reservation to assign to the table.
+ * @param {string} params.table_id - The ID of the table to update.
+ * @param {AbortSignal} signal - An optional AbortSignal to abort the request.
+ * @returns {Promise} - A promise indicating the completion of the operation.
+ */
 
 export async function putSeatingAssignment(params, signal) {
   const { reservation_id, table_id } = params;
@@ -109,6 +154,15 @@ export async function putSeatingAssignment(params, signal) {
   );
 }
 
+/**
+ * Updates the seating status of a reservation.
+ * @param {Object} params - The parameters for updating seating status.
+ * @param {string} params.reservation_id - The ID of the reservation to update.
+ * @param {string} params.status - The new status to set for the reservation.
+ * @param {AbortSignal} signal - An optional AbortSignal to abort the request.
+ * @returns {Promise} - A promise indicating the completion of the operation.
+ */
+
 export async function putSeatingStatus(params, signal) {
   const { reservation_id, status } = params;
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
@@ -120,11 +174,27 @@ export async function putSeatingStatus(params, signal) {
   });
 }
 
+/**
+ * Deletes seating assignment for a table.
+ * @param {Object} params - The parameters for deleting seating assignment.
+ * @param {string} params.table_id - The ID of the table for which seating assignment will be deleted.
+ * @param {AbortSignal} signal - An optional AbortSignal to abort the request.
+ * @returns {Promise} - A promise indicating the completion of the operation.
+ */
+
 export async function deleteSeating(params, signal) {
   const { table_id } = params;
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   return await fetchJson(url, { headers, signal, method: "DELETE" }, []);
 }
+
+/**
+ * Searches for reservations based on provided parameters.
+ * @param {Object} params - The search parameters.
+ * @param {string} params.mobile_number - The mobile number used for searching reservations.
+ * @param {AbortSignal} signal - An optional AbortSignal to abort the request.
+ * @returns {Promise<Array<Object>>} - A promise resolving to an array of reservations.
+ */
 
 export async function searchForReservation(params, signal) {
   const { mobile_number } = params;

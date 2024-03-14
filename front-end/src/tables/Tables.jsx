@@ -4,18 +4,27 @@ import ErrorAlert from "../layout/ErrorAlert";
 import initialFormState from "./initialFormState";
 import postTable from "./PostTable";
 
+/**
+ * Displays a form for creating a new table.
+ * @returns {JSX.Element} - The JSX element representing the table creation form.
+ */
+
 function NewTable() {
   const history = useHistory();
 
+  // State for form data and error handling
   const [formData, setformData] = useState({ ...initialFormState });
+  const [tablesError, setTablesError] = useState(null);
+
+  // Function to handle form input changes
   const handleChange = ({ target }) => {
     setformData({
       ...formData,
       [target.name]: target.value,
     });
   };
-  const [tablesError, setTablesError] = useState(null);
 
+  // Function to handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
     postTable(formData, setTablesError, history);
