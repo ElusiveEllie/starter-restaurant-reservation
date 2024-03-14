@@ -22,7 +22,7 @@ The application allows restaurant staff to manage reservations and table assignm
 
 3. Clicking the button to seat a reservation brings up a page with a drop-down to assign a table to the reservation. The drop-down populates with every available table and greys out any tables that do not have enough capacity for the reservation.
 <kbd>
-<img width="1080" alt="Form for table seating" src="https://i.imgur.com/wbUkoF5.png">
+<img width="1080" alt="Form for table seating" src="https://i.imgur.com/TJVX6Y6.png">
 </kbd>
 
 <hr>
