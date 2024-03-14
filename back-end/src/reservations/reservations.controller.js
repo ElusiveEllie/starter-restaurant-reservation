@@ -49,6 +49,14 @@ function hasOnlyValidProperties(req, res, next) {
     });
   }
 
+  // Return 400 with invalid mobile_number message if mobile_number doesn't match proper format
+  if (!/^([\d\d\d-\d\d\d-\d\d\d\d]{12,12})$/.test(data.mobile_number)) {
+    return next({
+      status: 400,
+      message: `mobile_number field must be in format of XXX-XXX-XXXX. Received ${data.mobile_number}.`,
+    });
+  }
+
   // Return 400 with invalid status message if status is "seated" or "finished"
   if (data.status === "seated" || data.status === "finished") {
     return next({
