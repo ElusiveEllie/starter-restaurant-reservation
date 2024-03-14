@@ -6,7 +6,7 @@ The application allows restaurant staff to manage reservations and table assignm
 
 ## Screenshots
 
-1. The main page is the Dashboard, with the top section for displaying reservations in a data table, while the bottom section shows restaurant table status and capacity. Buttons below the current date allow the user to move back and forth in the calendar, and return to the current day at any time.
+1. The main page is the Dashboard, with the top section for displaying reservations in a data table, while the bottom section shows restaurant table status and capacity. Buttons below the current date allow the user to move back and forth in the calendar, and return to the current day at any time. A Date selector may also be used to change the date farther out without needing to press the buttons or manually edit the URL.
 <kbd>
 <img width="1080" alt="Dashboard for reservation system" src="https://i.imgur.com/ivk13nI.png">
 </kbd>
