@@ -31,3 +31,9 @@
     margin: 0px 5px;
   }
 }
+
+@media (max-width: 420px) {
+  .date-control {
+    margin: 5px 0px;
+  }
+}

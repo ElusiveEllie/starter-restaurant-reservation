@@ -103,7 +103,7 @@ function Dashboard({ date }) {
             name="dashboard_date"
             onChange={handleDateChange}
             value={formDate}
-            className="form-control"
+            className="form-control date-control"
             style={{ maxWidth: 500, paddingTop: 0 }}
           />
         </label>
