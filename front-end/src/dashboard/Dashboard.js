@@ -54,67 +54,76 @@ function Dashboard({ date }) {
     }
   }
 
+  const reservationText = `Reservations for date
+  ${date}`;
+
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date {date}</h4>
+        <h4 className="mb-0 reservation-text">{reservationText}</h4>
       </div>
-      <button
-        type="button"
-        className="btn btn-secondary"
-        onClick={() => changeDate("back")}
-      >
-        Previous
-      </button>
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={() => changeDate("today")}
-      >
-        Today
-      </button>
-      <button
-        type="button"
-        className="btn btn-secondary"
-        onClick={() => changeDate("forward")}
-      >
-        Next
-      </button>
+      <div style={{ paddingBottom: 10 }}>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => changeDate("back")}
+        >
+          Previous
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => changeDate("today")}
+        >
+          Today
+        </button>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => changeDate("forward")}
+        >
+          Next
+        </button>
+      </div>
       <ErrorAlert error={reservationsError} />
-      <table className="table">
-        <thead className="thead-light">
-          <tr>
-            <th scope="col">Time</th>
-            <th scope="col">ID</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">First Name</th>
-            <th scope="col"># Guests</th>
-            <th scope="col">Contact Number</th>
-            <th scope="col">Date</th>
-            <th scope="col">Status</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <DisplayReservation reservations={reservations} history={history} />
-        </tbody>
-      </table>
-      <table className="table">
-        <thead className="thead-dark">
-          <tr>
-            <th scope="col">Table Name</th>
-            <th scope="col">Table Capacity</th>
-            <th scope="col">Occupied</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <DisplayTable loadDashboard={loadDashboard} tables={tables} />
-        </tbody>
-      </table>
+      <div className="table-responsive">
+        <table className="table">
+          <thead className="thead-light">
+            <tr>
+              <th scope="col">Time</th>
+              <th scope="col">ID</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">First Name</th>
+              <th scope="col"># Guests</th>
+              <th scope="col">Contact Number</th>
+              <th scope="col">Date</th>
+              <th scope="col">Status</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <DisplayReservation reservations={reservations} history={history} />
+          </tbody>
+        </table>
+      </div>
+      <div className="table-responsive">
+        <table className="table">
+          <thead className="thead-dark">
+            <tr>
+              <th scope="col">Table Name</th>
+              <th scope="col">Table Capacity</th>
+              <th scope="col">Occupied</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <DisplayTable loadDashboard={loadDashboard} tables={tables} />
+          </tbody>
+        </table>
+      </div>
     </main>
   );
 }

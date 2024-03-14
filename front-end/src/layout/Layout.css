@@ -2,3 +2,16 @@
   background-color: #393a44;
   min-width: 200px;
 }
+
+.reservation-text {
+  white-space: pre-line;
+}
+
+.btn {
+  margin-right: 5px;
+}
+
+.search-bar {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
