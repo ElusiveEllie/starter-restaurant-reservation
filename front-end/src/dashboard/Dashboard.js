@@ -22,6 +22,7 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [formDate, setFormDate] = useState(date);
 
   const history = useHistory();
 
@@ -31,6 +32,7 @@ function Dashboard({ date }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
+    setFormDate(date);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
@@ -52,6 +54,15 @@ function Dashboard({ date }) {
       date = newDate.toISOString().slice(0, 10);
       history.push(`/dashboard?date=${date}`);
     }
+  }
+
+  async function handleDateChange(event) {
+    event.preventDefault();
+    setFormDate(event.target.value);
+    history.push(
+      `/dashboard?date=${event.target.value}`
+    );
+    loadDashboard();
   }
 
   const reservationText = `Reservations for date
@@ -85,6 +96,17 @@ function Dashboard({ date }) {
         >
           Next
         </button>
+        <label htmlFor="dashboard_date">
+          <input
+            type="date"
+            id="dashboard_date"
+            name="dashboard_date"
+            onChange={handleDateChange}
+            value={formDate}
+            className="form-control"
+            style={{ maxWidth: 500, paddingTop: 0 }}
+          />
+        </label>
       </div>
       <ErrorAlert error={reservationsError} />
       <div className="table-responsive">
